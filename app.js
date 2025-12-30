@@ -9,9 +9,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const port = 3000;
 
-// Create connection to MySQL
 const db = mysql.createConnection({
-    host: 'testdb-1.coveuewwsj9i.us-east-1.rds.amazonaws.com',
+    host: 'mysql-db',   // if same Docker network
     user: 'root',
     password: '12345678',
     database: 'testdb_1'
