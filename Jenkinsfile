@@ -1,13 +1,9 @@
-
-
-
 pipeline {
     agent any
     
-
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
-        SONAR_TOKEN = credentials('sonar-token')
+        SONAR_TOKEN = credentials('SonarQube')
         SONAR_ORGANIZATION = 'jenkins-project-123'
         SONAR_PROJECT_KEY = 'jenkins-project-123_ci-jenkins'
     }
@@ -31,7 +27,7 @@ pipeline {
        stage('Docker Build And Push') {
             steps {
                 script {
-                    docker.withRegistry('', 'docker-cred') {
+                    docker.withRegistry('', 'DockerHub') {
                         def buildNumber = env.BUILD_NUMBER ?: '1'
                         def image = docker.build("pekker123/crud-123:latest")
                         image.push()
