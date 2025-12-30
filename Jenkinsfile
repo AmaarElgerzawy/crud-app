@@ -1,52 +1,41 @@
 pipeline {
     agent any
-    
+
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
-        SONAR_TOKEN = credentials('SonarQube')
-        SONAR_ORGANIZATION = 'jenkins-project-123'
-        SONAR_PROJECT_KEY = 'jenkins-project-123_ci-jenkins'
     }
 
     stages {
-        
+
         stage('Code-Analysis') {
             steps {
-                withSonarQubeEnv('SonarCloud') {
-                    sh '''$SCANNER_HOME/bin/sonar-scanner \
-  -Dsonar.organization=jenkins-project-123 \
-  -Dsonar.projectKey=jenkins-project-123_ci-jenkins \
-  -Dsonar.sources=. \
-  -Dsonar.host.url=https://sonarcloud.io '''
+                withSonarQubeEnv('SonarQube') {
+                    sh '''
+$SCANNER_HOME/bin/sonar-scanner \
+-Dsonar.projectKey=jenkins-project \
+-Dsonar.sources=. \
+-Dsonar.login=$SONAR_AUTH_TOKEN
+'''
                 }
             }
         }
-       
-        
-      
-       stage('Docker Build And Push') {
+
+        stage('Docker Build And Push') {
             steps {
                 script {
                     docker.withRegistry('', 'DockerHub') {
-                        def buildNumber = env.BUILD_NUMBER ?: '1'
-                        def image = docker.build("pekker123/crud-123:latest")
-                        image.push()
+                        def image = docker.build("ammarmohamed805/ammar-cicd-aws")
+                        image.push("latest")
                     }
                 }
             }
         }
-    
-       
+
         stage('Deploy To EC2') {
             steps {
-                script {
-                        sh 'docker rm -f $(docker ps -q) || true'
-                        sh 'docker run -d -p 3000:3000 pekker123/crud-123:latest'
-                        
-                    
-                }
+                sh 'docker rm -f app || true'
+                sh 'docker run -d --name app -p 3000:3000 ammarmohamed805/ammar-cicd-aws:latest'
             }
         }
-        
-}
+    }
 }
