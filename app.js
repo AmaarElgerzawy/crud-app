@@ -10,7 +10,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const port = 3000;
 
 const db = mysql.createConnection({
-    host: 'mysql-db',   // if same Docker network
+    host: 'mysql-db.coveuewwsj9i.us-east-1.rds.amazonaws.com',   // if same Docker network
     user: 'root',
     password: '12345678',
     database: 'testdb_1'
