@@ -5,8 +5,8 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: my-app
+    app: app
   ports:
   - protocol: TCP
-    port: 80        # Exposes on port 80
-    targetPort: 80  # Maps to the app's port 3000
+    port: 80
+    targetPort: 3000
