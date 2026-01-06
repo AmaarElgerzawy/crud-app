@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app
+  name: app-deployment
+  labels:
+    app: app
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: my-app
+      app: app
   template:
     metadata:
       labels:
-        app: my-app
+        app: app
     spec:
       containers:
-      - name: my-app-container
-        image: nginx
+      - name: app
+        image: ammarmohamed805/eks
         ports:
-        - containerPort: 80
-        imagePullPolicy: Always
+        - containerPort: 3000
